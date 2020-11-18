@@ -1,0 +1,18 @@
+﻿@model RazorNullableTypeParameterSample.Models.HomeViewModel
+
+@functions{
+    // This throws the following Exception: "A nullable type parameter must be known to be a value type or non-nullable reference type. Consider adding a 'class', 'struct', or type constraint."
+    // WHEN using Startup.cs services.AddRazorRuntimeCompilation();
+    // AND <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    // OR <RazorCompileOnBuild>true</RazorCompileOnBuild> AND update the .cshtml file while running.
+    private static string DisplayOptionalValue<T>(T? value, Func<T, string>? textSelector = null) where T : class
+    {
+        if (value == null)
+        {
+            return "-";
+        }
+        return textSelector?.Invoke(value) ?? value.ToString()!;
+    }
+}
+
+@DisplayOptionalValue("Hello World", x => x)
